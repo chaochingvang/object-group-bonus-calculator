@@ -1,3 +1,19 @@
+$(document).ready(jqReady);
+function jqReady() {
+  console.log('jquery ready');
+  $('#button').on('click', displayBonus);
+}
+
+function displayBonus() {
+  let outputText = employeeBonusList(employees[2]);   //.val() is getting the string of the userName input
+  // Number(variable) will return the integer version of string value
+  console.log(outputText);
+
+  let outputEl = $('#individualBonusCaluculation');      //variable outputEl is equal to the element ID helloOut on HTML
+  outputEl.empty();                   //Empty the element
+  outputEl.append(`<li>${outputText.name}</li> <li>${outputText.bonusPercentage}%</li> <li>$${outputText.totalCompensation}</li> <li>$${outputText.totalBonus}</li>`);
+}
+
 const employees = [
   {
     name: 'Atticus',
@@ -31,6 +47,63 @@ const employees = [
   }
 ];
 
+function calculateBonusPercentage(employee) {
+  let totalBonusPercent = 0;
+
+  // checking annual salary if over 65k, -1%
+  if (employee.annualSalary > 65000) {
+    totalBonusPercent -= 1;
+  }
+  // console.log(totalBonusPercent);
+
+  // checking employeeNumber if 4 digits, +5%
+  if (employee.employeeNumber.length === 4) {
+    totalBonusPercent += 5;
+  }
+  // console.log(totalBonusPercent);
+
+  // not checking if rating = 2, because it has no change on bonus%
+  // checking employeeRating, if 3, +4%
+  if (employee.reviewRating === 3) {
+    totalBonusPercent += 4;
+  }
+  // checking employeeRating, if 4, +6%
+  else if (employee.reviewRating === 4) {
+    totalBonusPercent += 6;
+  }
+  // checking employeeRating, if 5, +10%
+  else if (employee.reviewRating === 5) {
+    totalBonusPercent += 10;
+  }
+  // console.log(totalBonusPercent);
+
+  // calculating bonusPercentage
+  if (totalBonusPercent > 13) {
+    totalBonusPercent = 13;
+  }
+  else if (totalBonusPercent < 0) {
+    totalBonusPercent = 0;
+  }
+  return totalBonusPercent;
+  // console.log(totalBonusPercent);
+}
+
+function employeeBonusList(employeeObject) {
+  let totalBonusVariable = employeeObject.annualSalary * (calculateBonusPercentage(employeeObject) / 100);
+  let newObject = {
+    name: employeeObject.name,
+    bonusPercentage: calculateBonusPercentage(employeeObject),
+    totalCompensation: Number(employeeObject.annualSalary) + totalBonusVariable,
+    totalBonus: totalBonusVariable
+  }
+  console.log('in employeebonus function');
+  return newObject;
+}
+
+// employeeBonusList(employees[2]);
+console.log(employeeBonusList(employees[2]));
+
+
 // YOU SHOULD NOT NEED TO CHANGE ANYTHING ABOVE THIS POINT
 
 // This problem is massive! Break the problem down, take small steps, and test as you go.
@@ -38,5 +111,3 @@ const employees = [
 
 // This is not a race. Everyone on your team should understand what is happening.
 // Ask questions when you don't.
-
-console.log( employees );
