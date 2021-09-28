@@ -5,13 +5,14 @@ function jqReady() {
 }
 
 function displayBonus() {
-  let outputText = employeeBonusList(employees[2]);   //.val() is getting the string of the userName input
-  // Number(variable) will return the integer version of string value
+  let outputText = loopEmployees(employees);
   console.log(outputText);
 
-  let outputEl = $('#individualBonusCaluculation');      //variable outputEl is equal to the element ID helloOut on HTML
-  outputEl.empty();                   //Empty the element
-  outputEl.append(`<li>${outputText.name}</li> <li>${outputText.bonusPercentage}%</li> <li>$${outputText.totalCompensation}</li> <li>$${outputText.totalBonus}</li>`);
+  let outputEl = $('#individualBonusCaluculation');   //outputEl is set to ul element with ID
+  outputEl.empty();   //empties element
+  for (let i in outputText) {
+    outputEl.append(`<ul><li>${outputText[i].name}</li> <li>${outputText[i].bonusPercentage}%</li> <li>$${outputText[i].totalCompensation}</li> <li>$${outputText[i].totalBonus}</li > </ul>`);    //output onto DOM
+  }
 }
 
 const employees = [
@@ -88,6 +89,7 @@ function calculateBonusPercentage(employee) {
   // console.log(totalBonusPercent);
 }
 
+
 function employeeBonusList(employeeObject) {
   let totalBonusVariable = employeeObject.annualSalary * (calculateBonusPercentage(employeeObject) / 100);
   let newObject = {
@@ -101,8 +103,17 @@ function employeeBonusList(employeeObject) {
 }
 
 // employeeBonusList(employees[2]);
-console.log(employeeBonusList(employees[2]));
+function loopEmployees(employeeArray) {
+  let loopArray = [];
+  for (let i in employeeArray) {
+    console.log(employeeBonusList(employeeArray[i]));
+    loopArray.push(employeeBonusList(employeeArray[i]));
+    // loopArray.push(employeeArray[i]);
+  }
+  return loopArray;
+}
 
+console.log(loopEmployees(employees));
 
 // YOU SHOULD NOT NEED TO CHANGE ANYTHING ABOVE THIS POINT
 
